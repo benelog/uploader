@@ -57,6 +57,4 @@ public class UploadController {
 	private void putMessage(Map<String, Object> out, String message) {
 		out.put("message", message);
 	}
-
-	
 }
