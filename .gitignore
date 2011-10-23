@@ -1,0 +1,6 @@
+/target
+/deploy
+/.project
+/.classpath
+/.settings/*.*
+.springBeans
