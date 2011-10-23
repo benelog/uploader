@@ -26,7 +26,7 @@ public class UploadControllerTest {
 	UploadController ctrl = new UploadController();
 	 
 	@Test
-	public void specDescription() throws IOException {
+	public void fileShouldBeUploaded() throws IOException {
 		// given 
 		String fileName = "test.txt";
 		String fileContent = "my works";
