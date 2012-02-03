@@ -2,7 +2,7 @@ Using uploader
 =========
 Download
 
-	wget benelog.net/uploader.jar
+	wget file.benelog.net/uploader.jar
     
 Execute
 
