@@ -21,7 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 public class UploadControllerTest {
 
 	@Rule
-	TemporaryFolder uploadFolder = new TemporaryFolder();
+	public TemporaryFolder uploadFolder = new TemporaryFolder();
 	UploadController ctrl = new UploadController();
 
 	@Test
