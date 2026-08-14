@@ -1,5 +1,26 @@
-Using Uploader
+Uploader
 =========
+Uploader puts a file on a server through a web browser.
+
+Run the binary on the machine that should receive the files, open the page it
+serves, type the directory to write to and pick a file. That is the whole tool.
+It is handy when SSH is not at hand: from a phone, from a borrowed machine, or
+for someone who should be able to drop a file on a server without a shell
+account.
+
+It is a single binary with nothing to install and no configuration, it starts in
+a moment, and an upload is streamed to disk, so the size of a file is not a
+concern.
+
+Note that Uploader has no authentication: anyone who can reach the port can
+write a file anywhere the process has permission to. Run it on a trusted
+network, or behind something that does the authentication for it, and stop it
+when you are done.
+
+
+Using Uploader
+---------
+
 Download the binary for your platform from the
 [latest release](https://github.com/benelog/uploader/releases/latest):
 
@@ -19,9 +40,6 @@ Port 8080 is the default http port. You can use "--httpPort" option to change it
     ./uploader-linux-amd64 --httpPort=10023
 
 Then open http://localhost:8080/ , fill in the server path and pick a file.
-
-There is nothing to install: the binary has no dependency and the templates
-are embedded in it.
 
 
 Large files
