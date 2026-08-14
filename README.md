@@ -1,21 +1,16 @@
 Uploader
 =========
-Uploader puts a file on a server through a web browser.
+Uploader puts a file on a server through a web browser: run the binary on the
+receiving machine, open the page it serves, type the destination directory and
+pick a file.
 
-Run the binary on the machine that should receive the files, open the page it
-serves, type the directory to write to and pick a file. That is the whole tool.
-It is handy when SSH is not at hand: from a phone, from a borrowed machine, or
-for someone who should be able to drop a file on a server without a shell
-account.
-
-It is a single binary with nothing to install and no configuration, it starts in
-a moment, and an upload is streamed to disk, so the size of a file is not a
-concern.
+- Handy when SSH is not at hand
+- A single binary with nothing to install and no configuration
+- Uploads are streamed to disk, so file size is not a concern
 
 Note that Uploader has no authentication: anyone who can reach the port can
-write a file anywhere the process has permission to. Run it on a trusted
-network, or behind something that does the authentication for it, and stop it
-when you are done.
+write files anywhere the process has permission to. Run it on a trusted network
+or behind something that authenticates for it, and stop it when you are done.
 
 
 Using Uploader
@@ -31,27 +26,26 @@ Available assets: `uploader-linux-amd64`, `uploader-linux-arm64`,
 `uploader-darwin-amd64`, `uploader-darwin-arm64`, `uploader-windows-amd64.exe`.
 To pin a version, replace `latest/download` with `download/v2.0.0`.
 
-Execute
+Run it, then open http://localhost:8080/ , fill in the server path and pick a
+file:
 
     ./uploader-linux-amd64
 
-Port 8080 is the default http port. You can use "--httpPort" option to change it.
+The default port is 8080; change it with `--httpPort`:
 
     ./uploader-linux-amd64 --httpPort=10023
-
-Then open http://localhost:8080/ , fill in the server path and pick a file.
 
 
 Large files
 ---------
 
-The request body is streamed part by part straight to the destination file, so
-an upload is bounded by the free space of the target disk, not by memory. A 1
-GiB upload keeps the process under 10 MiB of RSS.
+The request body is streamed straight to the destination file, so an upload is
+bounded by the free space of the target disk, not by memory: a 1 GiB upload
+keeps the process under 10 MiB of RSS.
 
-The `path` field must be sent before the `file` field, because the destination
-must be known before the content is written. The HTML form already does this;
-keep the same order when posting with a tool such as curl:
+The `path` field must precede the `file` field, since the destination must be
+known before the content arrives. The HTML form already does this; keep the
+same order when posting with a tool such as curl:
 
     curl -F "path=/tmp/uploads/" -F "file=@big.iso" http://localhost:8080/upload.html
 
