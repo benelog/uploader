@@ -13,7 +13,8 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: stable
-      - uses: golangci/golangci-lint-action@v6
+      # v2 of golangci-lint, matching .golangci.yml, needs action v7 or later.
+      - uses: golangci/golangci-lint-action@v9
         with:
-          version: latest
+          version: v2.12
       - run: go test ./...
