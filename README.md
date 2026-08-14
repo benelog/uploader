@@ -38,35 +38,7 @@ keep the same order when posting with a tool such as curl:
     curl -F "path=/tmp/uploads/" -F "file=@big.iso" http://localhost:8080/upload.html
 
 
-Build from source
 ---------
 
-    make build      # go build -o uploader .
-    make run        # build and start on port 8080
-
-
-Quality tools
----------
-
-Following https://blog.benelog.net/go-quality-tools :
-
-    make fmt        # goimports -w .
-    make lint       # golangci-lint run ./...
-    make test       # go test ./...
-    make check      # fmt + lint + test, before committing
-    make ci         # lint + test, what CI runs
-
-`goimports` and `golangci-lint` (v2) are needed for `fmt` and `lint`:
-
-    go install golang.org/x/tools/cmd/goimports@latest
-    go install github.com/golangci/golangci-lint/v2/cmd/golangci-lint@latest
-
-The enabled linters are declared in `.golangci.yml`.
-
-
-Layout
----------
-
-    main.go                                 entry point, --httpPort flag
-    internal/uploader/handler.go            /form.html, /upload.html handlers
-    internal/uploader/templates/            HTML templates, embedded with go:embed
+Changes of each version are listed in [CHANGELOG.md](CHANGELOG.md).
+To build or modify the uploader, see [DEVELOPMENT.md](DEVELOPMENT.md).
