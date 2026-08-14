@@ -1,6 +1,2 @@
-/target
-/deploy
-/.project
-/.classpath
-/.settings/*.*
-.springBeans
+/uploader
+/dist
