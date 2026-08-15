@@ -34,7 +34,10 @@ The test of a 256 MiB upload is the slow one; skip it with `go test -short ./...
 Layout
 ---------
 
-    main.go                                 entry point, --httpPort flag
+    main.go                                 entry point, flags, startup banner
+    main_test.go                            tests of the handler chain main builds
+    internal/auth/auth.go                   Basic auth credentials and the gate
+    internal/auth/auth_test.go              tests
     internal/uploader/handler.go            /form.html, /upload.html handlers
     internal/uploader/handler_test.go       tests
     internal/uploader/templates/            HTML templates, embedded with go:embed
@@ -43,6 +46,14 @@ Layout
 part to `Store`, which streams it to its destination. Nothing reads the body as
 a whole, which is what keeps the memory flat on a large upload; keep it that way
 when changing the upload path.
+
+`auth.Require` wraps the whole mux in `buildHandler`, so a route added to
+`Handler.Routes` is protected the moment it is registered: there is no
+per-handler auth code to forget. `--no-auth` is the single place that removes
+the wrapper. The 401 response must keep its `WWW-Authenticate` header, otherwise
+browsers never show the login prompt and the form becomes unreachable.
+Credentials are compared through `crypto/subtle` on SHA-256 digests, so neither
+the password nor its length leaks through timing.
 
 
 Releasing

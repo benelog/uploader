@@ -1,5 +1,31 @@
 # Changelog
 
+## v2.1.0
+
+Uploader now asks for a password.
+
+### Highlights
+
+- **Authenticated by default, with zero setup.** `/`, `/form.html` and
+  `/upload.html` are behind HTTP Basic auth from the first run: no config file
+  and no flag to remember, because the username defaults to the OS login
+  account and the password is generated at startup and printed once.
+- **Fixed credentials when you need them.** `--user` and `--password` override
+  either half; a password given on the command line is never echoed to the
+  console.
+- **The policy is explained at boot.** The startup banner names the protected
+  URLs, where each credential came from, and a ready-to-paste `curl -u` line.
+- **`--no-auth` keeps the old behaviour** for a trusted network, and says
+  loudly at startup that anyone reaching the port can write files. It is
+  rejected together with `--user` or `--password`.
+
+### Notes
+
+- A generated password changes on every restart, so scripted clients should
+  either read it from the startup output or pin it with `--password`.
+- The traffic is still plain HTTP: the credentials travel unencrypted, so this
+  remains a trusted-network tool. Put it behind a reverse proxy for TLS.
+
 ## v2.0.0
 
 Uploader is rewritten in Go. It is now a single binary with no dependency:
