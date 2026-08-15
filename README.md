@@ -54,3 +54,4 @@ same order when posting with a tool such as curl:
 
 Changes of each version are listed in [CHANGELOG.md](CHANGELOG.md).
 To build or modify the uploader, see [DEVELOPMENT.md](DEVELOPMENT.md).
+Uploader is released under the MIT License; see [LICENSE](LICENSE).
