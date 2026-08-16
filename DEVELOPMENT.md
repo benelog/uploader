@@ -54,18 +54,10 @@ Credentials are compared through `crypto/subtle` on SHA-256 digests, so neither 
 Releasing
 ---------
 
-Build one binary per platform, tag, then publish the assets:
+The procedure lives in the `release` skill (`.claude/skills/release/`).
+Write the `## vX.Y.Z` section in `CHANGELOG.md`, update the pinned-version example in `README.md`, commit and push, then run:
 
-    rm -rf dist && mkdir -p dist
-    for target in linux/amd64 linux/arm64 darwin/amd64 darwin/arm64 windows/amd64; do
-      GOOS=${target%/*}; GOARCH=${target#*/}
-      out=dist/uploader-$GOOS-$GOARCH
-      [ "$GOOS" = windows ] && out=$out.exe
-      GOOS=$GOOS GOARCH=$GOARCH CGO_ENABLED=0 go build -trimpath -ldflags="-s -w" -o $out .
-    done
+    .claude/skills/release/scripts/release.sh vX.Y.Z
 
-    git tag -a vX.Y.Z -m "vX.Y.Z" && git push origin vX.Y.Z
-    gh release create vX.Y.Z dist/* --title "vX.Y.Z" --notes-file notes.md
-
-Add the section of the new version to `CHANGELOG.md` first and use it as the release notes.
+The script verifies the repo (clean tree, master in sync with origin, tag free, CHANGELOG section present, README bumped), runs `make ci`, cross-compiles one binary per platform into `dist/` (`build-dist.sh`), tags, and publishes the GitHub release with the CHANGELOG section as its notes.
 The download instructions in `README.md` point at `releases/latest`, so they need no update; only the pinned example does.

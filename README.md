@@ -20,7 +20,7 @@ Download the binary for your platform from the [latest release](https://github.c
 	chmod +x uploader-linux-amd64
 
 Available assets: `uploader-linux-amd64`, `uploader-linux-arm64`, `uploader-darwin-amd64`, `uploader-darwin-arm64`, `uploader-windows-amd64.exe`.
-To pin a version, replace `latest/download` with `download/v2.0.0`.
+To pin a version, replace `latest/download` with `download/v2.1.0`.
 
 Run it, then open http://localhost:8080/ , fill in the server path and pick a file:
 
