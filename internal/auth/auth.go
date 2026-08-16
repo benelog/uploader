@@ -52,7 +52,7 @@ func Resolve(username, password string) (Credentials, error) {
 		c.DefaultedUsername = true
 	}
 	if c.Password == "" {
-		generated, err := GeneratePassword()
+		generated, err := generatePassword()
 		if err != nil {
 			return Credentials{}, err
 		}
@@ -62,8 +62,8 @@ func Resolve(username, password string) (Credentials, error) {
 	return c, nil
 }
 
-// GeneratePassword returns a random, URL-safe password.
-func GeneratePassword() (string, error) {
+// generatePassword returns a random, URL-safe password.
+func generatePassword() (string, error) {
 	buf := make([]byte, passwordBytes)
 	if _, err := rand.Read(buf); err != nil {
 		return "", err
@@ -71,11 +71,17 @@ func GeneratePassword() (string, error) {
 	return base64.RawURLEncoding.EncodeToString(buf), nil
 }
 
-// Matches compares the presented credentials in constant time. Hashing first
-// keeps the comparison length-independent, so neither value's length leaks.
-func (c Credentials) Matches(username, password string) bool {
-	gotUser, wantUser := sha256.Sum256([]byte(username)), sha256.Sum256([]byte(c.Username))
-	gotPass, wantPass := sha256.Sum256([]byte(password)), sha256.Sum256([]byte(c.Password))
+// digests hashes the expected credentials, so the per-request gate compares
+// against precomputed values instead of re-hashing them on every request.
+func (c Credentials) digests() (user, pass [sha256.Size]byte) {
+	return sha256.Sum256([]byte(c.Username)), sha256.Sum256([]byte(c.Password))
+}
+
+// matches compares the presented credentials against the expected digests in
+// constant time. Hashing the presented values first keeps the comparison
+// length-independent, so neither value's length leaks.
+func matches(wantUser, wantPass [sha256.Size]byte, username, password string) bool {
+	gotUser, gotPass := sha256.Sum256([]byte(username)), sha256.Sum256([]byte(password))
 	userOK := subtle.ConstantTimeCompare(gotUser[:], wantUser[:]) == 1
 	passOK := subtle.ConstantTimeCompare(gotPass[:], wantPass[:]) == 1
 	return userOK && passOK
@@ -85,9 +91,10 @@ func (c Credentials) Matches(username, password string) bool {
 // has to carry the expected Basic credentials. Wrapping the whole mux rather
 // than each handler is what keeps a newly added route protected by default.
 func Require(creds Credentials, next http.Handler) http.Handler {
+	wantUser, wantPass := creds.digests()
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		username, password, ok := r.BasicAuth()
-		if !ok || !creds.Matches(username, password) {
+		if !ok || !matches(wantUser, wantPass, username, password) {
 			log.Printf("unauthorized request from %s: %s %s", r.RemoteAddr, r.Method, r.URL.Path)
 			// The realm header is what makes the browser show a login prompt.
 			w.Header().Set("WWW-Authenticate", `Basic realm="`+realm+`", charset="UTF-8"`)

@@ -6,15 +6,15 @@ Uploader now asks for a password.
 
 ### Highlights
 
-- **Authenticated by default, with zero setup.** `/`, `/form.html` and
-  `/upload.html` are behind HTTP Basic auth from the first run: no config file
-  and no flag to remember, because the username defaults to the OS login
-  account and the password is generated at startup and printed once.
+- **Authenticated by default, with zero setup.** Every URL is behind HTTP
+  Basic auth from the first run: no config file and no flag to remember,
+  because the username defaults to the OS login account and the password is
+  generated at startup and printed once.
 - **Fixed credentials when you need them.** `--user` and `--password` override
   either half; a password given on the command line is never echoed to the
   console.
-- **The policy is explained at boot.** The startup banner names the protected
-  URLs, where each credential came from, and a ready-to-paste `curl -u` line.
+- **The policy is explained at boot.** The startup banner says where each
+  credential came from, and gives a ready-to-paste `curl -u` line.
 - **`--no-auth` keeps the old behaviour** for a trusted network, and says
   loudly at startup that anyone reaching the port can write files. It is
   rejected together with `--user` or `--password`.

@@ -41,8 +41,7 @@ The default port is 8080; change it with `--httpPort`:
 Authentication
 ---------
 
-`/`, `/form.html` and `/upload.html` all require **HTTP Basic auth**. By
-default:
+Every URL requires **HTTP Basic auth**. By default:
 
 - the **username** is the OS account the server runs as;
 - the **password** is randomly generated (128 bits) each time the server
@@ -51,8 +50,7 @@ default:
 The policy is spelled out at boot:
 
     -----------------------------
-    Authentication: HTTP Basic auth is required on every URL
-       (/, /form.html, /upload.html).
+    Authentication: HTTP Basic auth is required on every URL.
        Username : alice  (OS login account)
        Password : 4jddSK1CdMHklMzAifdkiQ  (randomly generated for this run)
        The password changes on every restart. Use --user / --password to fix it.

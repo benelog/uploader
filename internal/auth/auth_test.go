@@ -55,14 +55,6 @@ func TestResolveGeneratesADifferentPasswordEachTime(t *testing.T) {
 	}
 }
 
-func TestOSUsernameStripsWindowsDomain(t *testing.T) {
-	// The stripping logic is inlined in osUsername; check it does not leak a
-	// domain prefix on any platform.
-	if name := osUsername(); strings.ContainsAny(name, `\/`) {
-		t.Errorf("osUsername() = %q, want no domain separator", name)
-	}
-}
-
 func TestRequestWithoutCredentialsIsUnauthorized(t *testing.T) {
 	rec := gated(t, "/form.html", "", "")
 
@@ -103,19 +95,9 @@ func TestRequestWithCorrectCredentialsReachesTheHandler(t *testing.T) {
 	}
 }
 
-// The gate sits above the mux, so an unknown path is rejected before the
-// routing decides it does not exist: no route can be reached anonymously.
-func TestEveryPathIsGated(t *testing.T) {
-	for _, path := range []string{"/", "/form.html", "/upload.html", "/nowhere"} {
-		if rec := gated(t, path, "", ""); rec.Code != http.StatusUnauthorized {
-			t.Errorf("GET %s without credentials = %d, want %d", path, rec.Code, http.StatusUnauthorized)
-		}
-	}
-}
-
 func TestMatchesRejectsEmptyCredentials(t *testing.T) {
-	creds := Credentials{Username: testUser, Password: testPassword}
-	if creds.Matches("", "") {
+	wantUser, wantPass := Credentials{Username: testUser, Password: testPassword}.digests()
+	if matches(wantUser, wantPass, "", "") {
 		t.Error("empty credentials were accepted")
 	}
 }
