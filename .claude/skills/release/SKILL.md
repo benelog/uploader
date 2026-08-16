@@ -28,14 +28,14 @@ The script refuses to release while it still names an old version.
 
 ## 4. Commit and push
 
-Commit the CHANGELOG and README changes and push to `origin master`.
-The script releases exactly `origin/master`, so it refuses a dirty tree or an unpushed HEAD.
+Commit the CHANGELOG and README changes and push to `origin main`.
+The script releases exactly `origin/main`, so it refuses a dirty tree or an unpushed HEAD.
 
 ## 5. Run the script
 
     .claude/skills/release/scripts/release.sh vX.Y.Z
 
-It re-verifies everything (clean tree, master in sync, tag free, CHANGELOG section present, README bumped, `gh` authenticated), runs `make ci`, extracts the CHANGELOG section as the release notes, cross-compiles the five binaries via `scripts/build-dist.sh`, then tags, pushes the tag, and creates the GitHub release with the binaries attached.
+It re-verifies everything (clean tree, main in sync, tag free, CHANGELOG section present, README bumped, `gh` authenticated), runs `make ci`, extracts the CHANGELOG section as the release notes, cross-compiles the five binaries via `scripts/build-dist.sh`, then tags, pushes the tag, and creates the GitHub release with the binaries attached.
 
 Everything before its "Tag and publish" step is read-only, so an early failure needs no cleanup — fix the reported problem and rerun.
 If it fails *after* the tag was pushed, do not delete or re-push the tag: fix the cause and rerun just the failed command (usually `gh release create vX.Y.Z dist/* --title vX.Y.Z --notes-file <notes>`).

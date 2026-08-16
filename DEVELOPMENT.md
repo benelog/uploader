@@ -59,5 +59,5 @@ Write the `## vX.Y.Z` section in `CHANGELOG.md`, update the pinned-version examp
 
     .claude/skills/release/scripts/release.sh vX.Y.Z
 
-The script verifies the repo (clean tree, master in sync with origin, tag free, CHANGELOG section present, README bumped), runs `make ci`, cross-compiles one binary per platform into `dist/` (`build-dist.sh`), tags, and publishes the GitHub release with the CHANGELOG section as its notes.
+The script verifies the repo (clean tree, main in sync with origin, tag free, CHANGELOG section present, README bumped), runs `make ci`, cross-compiles one binary per platform into `dist/` (`build-dist.sh`), tags, and publishes the GitHub release with the CHANGELOG section as its notes.
 The download instructions in `README.md` point at `releases/latest`, so they need no update; only the pinned example does.

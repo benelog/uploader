@@ -22,10 +22,10 @@ fail() { echo "error: $1" >&2; exit 1; }
 
 [[ -z $(git status --porcelain) ]] || fail "working tree is not clean; commit or stash first"
 branch=$(git rev-parse --abbrev-ref HEAD)
-[[ $branch == master ]] || fail "release from master, not '$branch'"
-git fetch --quiet origin master
-[[ $(git rev-parse HEAD) == $(git rev-parse origin/master) ]] \
-  || fail "HEAD is not in sync with origin/master; push or pull first"
+[[ $branch == main ]] || fail "release from main, not '$branch'"
+git fetch --quiet origin main
+[[ $(git rev-parse HEAD) == $(git rev-parse origin/main) ]] \
+  || fail "HEAD is not in sync with origin/main; push or pull first"
 ! git rev-parse --verify --quiet "refs/tags/$version" >/dev/null \
   || fail "tag $version already exists"
 grep -q "^## $version\$" CHANGELOG.md \
